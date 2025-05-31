@@ -1,0 +1,16 @@
+[package]
+name = "ramen-timer"
+version = "1.0.0"
+edition = "2021"
+authors = ["Yasuhiko Machino"]
+description = "A simple terminal-based countdown timer for perfect ramen noodles"
+license = "MIT"
+readme = "README.md"
+repository = "https://github.com/yasuhikomachino/ramen-timer"
+homepage = "https://github.com/yasuhikomachino/ramen-timer"
+keywords = ["timer", "ramen", "tui", "terminal", "countdown"]
+categories = ["command-line-utilities"]
+
+[dependencies]
+ratatui = "0.28"
+crossterm = "0.28"
