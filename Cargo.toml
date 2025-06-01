@@ -1,6 +1,6 @@
 [package]
 name = "ramen-timer"
-version = "1.0.0"
+version = "1.0.1"
 edition = "2021"
 authors = ["Yasuhiko Machino"]
 description = "A simple terminal-based countdown timer for perfect ramen noodles"
