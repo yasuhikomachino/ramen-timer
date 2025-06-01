@@ -14,9 +14,9 @@ pub struct App {
 }
 
 impl App {
-    pub fn new() -> App {
+    pub fn with_duration(seconds: u32) -> App {
         App {
-            timer: Timer::new(),
+            timer: Timer::with_duration(seconds),
             show_help: false,
         }
     }
@@ -147,11 +147,11 @@ pub fn ui(f: &mut Frame, app: &App) {
             Line::from(""),
             Line::from("Controls:"),
             Line::from("  Space or p    - Start/Pause timer"),
-            Line::from("  r             - Reset timer to 3:00"),
+            Line::from("  r             - Reset timer to initial time"),
             Line::from("  q or Esc      - Quit application"),
             Line::from("  h or ?        - Show/hide this help"),
             Line::from(""),
-            Line::from("Timer starts at 3:00 and counts down."),
+            Line::from("Timer starts at the specified time and counts down."),
             Line::from("When it reaches 0:00, you'll see RAMEN!"),
             Line::from(""),
             Line::from("Press any key to close this help..."),

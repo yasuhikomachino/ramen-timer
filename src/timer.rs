@@ -1,5 +1,4 @@
 use std::time::{Duration, Instant};
-use crate::config::DEFAULT_TIMER_SECONDS;
 
 #[derive(Debug, Clone, Copy, PartialEq)]
 pub enum TimerState {
@@ -12,14 +11,16 @@ pub enum TimerState {
 pub struct Timer {
     pub state: TimerState,
     pub remaining_seconds: u32,
+    initial_seconds: u32,
     last_tick: Instant,
 }
 
 impl Timer {
-    pub fn new() -> Timer {
+    pub fn with_duration(seconds: u32) -> Timer {
         Timer {
             state: TimerState::Initial,
-            remaining_seconds: DEFAULT_TIMER_SECONDS,
+            remaining_seconds: seconds,
+            initial_seconds: seconds,
             last_tick: Instant::now(),
         }
     }
@@ -47,7 +48,7 @@ impl Timer {
 
     pub fn reset(&mut self) {
         self.state = TimerState::Initial;
-        self.remaining_seconds = DEFAULT_TIMER_SECONDS;
+        self.remaining_seconds = self.initial_seconds;
         self.last_tick = Instant::now();
     }
 

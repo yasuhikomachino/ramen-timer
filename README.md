@@ -48,12 +48,29 @@ Simply run the timer:
 ramen-timer
 ```
 
+You can also specify a custom timer duration:
+
+```bash
+# Set timer to 5 minutes
+ramen-timer 5:00
+
+# Set timer to 90 seconds
+ramen-timer 90
+```
+
+### Command Line Arguments
+
+- `TIME` - Timer duration (optional)
+  - Format: `M:SS` for minutes and seconds (e.g., `3:00`)
+  - Format: `SS` for seconds only (e.g., `180`)
+  - Default: 3:00 (3 minutes) if not specified
+
 ### Controls
 
 | Key | Action |
 |-----|--------|
 | `Space` or `p` | Start/Pause timer |
-| `r` | Reset to 3:00 |
+| `r` | Reset to initial time |
 | `q` or `Esc` | Quit |
 | `h` or `?` | Show help |
 
