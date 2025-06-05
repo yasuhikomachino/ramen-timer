@@ -57,7 +57,7 @@ pub fn ui(f: &mut Frame, app: &App) {
 
     let time_text = match app.timer.state {
         TimerState::Finished => {
-            let large_ramen = app.timer.format_large_ramen();
+            let large_ramen = format_large_ramen();
             let mut lines = vec![];
             for line in large_ramen {
                 lines.push(Line::from(vec![
@@ -73,7 +73,7 @@ pub fn ui(f: &mut Frame, app: &App) {
             Text::from(lines)
         }
         TimerState::Paused => {
-            let large_time = app.timer.format_large_time();
+            let large_time = format_large_time(app.timer.remaining_seconds);
             let mut lines = vec![];
             for line in large_time {
                 lines.push(Line::from(vec![
@@ -97,7 +97,7 @@ pub fn ui(f: &mut Frame, app: &App) {
             Text::from(lines)
         }
         _ => {
-            let large_time = app.timer.format_large_time();
+            let large_time = format_large_time(app.timer.remaining_seconds);
             let mut lines = vec![];
             for line in large_time {
                 lines.push(Line::from(vec![
@@ -188,4 +188,149 @@ fn centered_rect(percent_x: u16, percent_y: u16, r: Rect) -> Rect {
             Constraint::Percentage((100 - percent_x) / 2),
         ])
         .split(popup_layout[1])[1]
+}
+
+pub fn format_large_time(remaining_seconds: u32) -> Vec<String> {
+    let minutes = remaining_seconds / 60;
+    let seconds = remaining_seconds % 60;
+    let time_str = format!("{:02}:{:02}", minutes, seconds);
+
+    let mut lines = vec![];
+    for row in 0..7 {
+        let mut line = String::new();
+        for ch in time_str.chars() {
+            line.push_str(&get_large_digit(ch, row));
+            line.push(' ');
+        }
+        lines.push(line);
+    }
+    lines
+}
+
+fn get_large_digit(digit: char, row: usize) -> &'static str {
+    match digit {
+        '0' => match row {
+            0 => "████",
+            1 => "█  █",
+            2 => "█  █",
+            3 => "█  █",
+            4 => "█  █",
+            5 => "█  █",
+            6 => "████",
+            _ => "    ",
+        },
+        '1' => match row {
+            0 => "  █ ",
+            1 => " ██ ",
+            2 => "  █ ",
+            3 => "  █ ",
+            4 => "  █ ",
+            5 => "  █ ",
+            6 => "████",
+            _ => "    ",
+        },
+        '2' => match row {
+            0 => "████",
+            1 => "   █",
+            2 => "   █",
+            3 => "████",
+            4 => "█   ",
+            5 => "█   ",
+            6 => "████",
+            _ => "    ",
+        },
+        '3' => match row {
+            0 => "████",
+            1 => "   █",
+            2 => "   █",
+            3 => "████",
+            4 => "   █",
+            5 => "   █",
+            6 => "████",
+            _ => "    ",
+        },
+        '4' => match row {
+            0 => "█  █",
+            1 => "█  █",
+            2 => "█  █",
+            3 => "████",
+            4 => "   █",
+            5 => "   █",
+            6 => "   █",
+            _ => "    ",
+        },
+        '5' => match row {
+            0 => "████",
+            1 => "█   ",
+            2 => "█   ",
+            3 => "████",
+            4 => "   █",
+            5 => "   █",
+            6 => "████",
+            _ => "    ",
+        },
+        '6' => match row {
+            0 => "████",
+            1 => "█   ",
+            2 => "█   ",
+            3 => "████",
+            4 => "█  █",
+            5 => "█  █",
+            6 => "████",
+            _ => "    ",
+        },
+        '7' => match row {
+            0 => "████",
+            1 => "   █",
+            2 => "   █",
+            3 => "  █ ",
+            4 => "  █ ",
+            5 => " █  ",
+            6 => " █  ",
+            _ => "    ",
+        },
+        '8' => match row {
+            0 => "████",
+            1 => "█  █",
+            2 => "█  █",
+            3 => "████",
+            4 => "█  █",
+            5 => "█  █",
+            6 => "████",
+            _ => "    ",
+        },
+        '9' => match row {
+            0 => "████",
+            1 => "█  █",
+            2 => "█  █",
+            3 => "████",
+            4 => "   █",
+            5 => "   █",
+            6 => "████",
+            _ => "    ",
+        },
+        ':' => match row {
+            0 => "  ",
+            1 => "  ",
+            2 => "██",
+            3 => "  ",
+            4 => "██",
+            5 => "  ",
+            6 => "  ",
+            _ => "  ",
+        },
+        _ => "    ",
+    }
+}
+
+pub fn format_large_ramen() -> Vec<String> {
+    vec![
+        "██████   █████  ███    ███ ███████ ███    ██ ██".to_string(),
+        "██   ██ ██   ██ ████  ████ ██      ████   ██ ██".to_string(),
+        "██████  ███████ ██ ████ ██ █████   ██ ██  ██ ██".to_string(),
+        "██   ██ ██   ██ ██  ██  ██ ██      ██  ██ ██   ".to_string(),
+        "██   ██ ██   ██ ██      ██ ███████ ██   ████ ██".to_string(),
+        "                                              ".to_string(),
+        "        🍜 🍜 🍜 🍜 🍜 🍜 🍜 🍜 🍜          ".to_string(),
+    ]
 }

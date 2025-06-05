@@ -1,6 +1,7 @@
 mod config;
 mod timer;
 mod ui;
+mod notification;
 
 use clap::Parser;
 
@@ -104,6 +105,11 @@ fn run_app<B: Backend>(
     terminal: &mut Terminal<B>,
     app: &mut App,
 ) -> Result<(), Box<dyn Error>> {
+    use crate::timer::TimerState;
+    use crate::notification::NotificationService;
+    
+    let mut timer_completed = false;
+    
     loop {
         terminal.draw(|f| ui::ui(f, app))?;
 
@@ -113,7 +119,10 @@ fn run_app<B: Backend>(
                     match key.code {
                         KeyCode::Char('q') | KeyCode::Esc => return Ok(()),
                         KeyCode::Char(' ') | KeyCode::Char('p') => app.timer.toggle_pause(),
-                        KeyCode::Char('r') => app.timer.reset(),
+                        KeyCode::Char('r') => {
+                            app.timer.reset();
+                            timer_completed = false;
+                        },
                         KeyCode::Char('h') | KeyCode::Char('?') => app.toggle_help(),
                         _ => {}
                     }
@@ -121,6 +130,16 @@ fn run_app<B: Backend>(
             }
         }
 
+        let prev_state = app.timer.state;
         app.timer.update();
+        
+        // Check if timer just completed
+        if prev_state != TimerState::Finished && app.timer.state == TimerState::Finished && !timer_completed {
+            timer_completed = true;
+            // Send notification
+            if let Err(e) = NotificationService::send_timer_complete() {
+                eprintln!("Failed to send notification: {}", e);
+            }
+        }
     }
 }
